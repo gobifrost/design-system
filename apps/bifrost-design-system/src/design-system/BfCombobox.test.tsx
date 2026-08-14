@@ -1,7 +1,7 @@
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { BfCombobox, BfMultiSelect, type BfComboboxOption } from "./BfCombobox";
 
 const options: BfComboboxOption[] = [
@@ -68,5 +68,29 @@ describe("BfCombobox", () => {
     expect(trigger).toHaveTextContent("Monthly");
     expect(trigger).toHaveTextContent("Quarterly");
     expect(trigger).not.toHaveTextContent("Annual");
+  });
+
+  it("portals and flips the list above a trigger near the viewport edge", async () => {
+    const user = userEvent.setup();
+    render(<MultiHarness />);
+    const trigger = screen.getByRole("combobox", { name: "Cadences" });
+    vi.spyOn(trigger, "getBoundingClientRect").mockReturnValue({
+      bottom: 790,
+      height: 40,
+      left: 70,
+      right: 370,
+      top: 750,
+      width: 300,
+      x: 70,
+      y: 750,
+      toJSON: () => ({}),
+    });
+
+    await user.click(trigger);
+    const listbox = screen.getByRole("listbox", { name: "Cadences" });
+    const popover = listbox.closest(".bds-combobox__popover");
+    expect(popover).toHaveAttribute("data-placement", "top");
+    expect(popover?.parentElement).toBe(document.body);
+    expect(popover).toHaveStyle({ bottom: "24px", maxHeight: "736px" });
   });
 });

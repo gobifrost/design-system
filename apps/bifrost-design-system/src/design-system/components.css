@@ -104,10 +104,10 @@
 .bds-combobox__clear { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: var(--bf-radius-control); cursor: pointer; }
 .bds-combobox__clear:hover { background: var(--bf-cool); color: var(--bf-ink); }
 .bds-combobox > .bds-combobox__clear { position: absolute; top: 27px; right: 34px; z-index: 1; padding: 0; border: 0; background: transparent; color: var(--bf-muted); }
-.bds-combobox__popover { position: absolute; top: calc(100% + 6px); left: 0; z-index: 80; width: max(100%, 260px); overflow: hidden; border: 1px solid var(--bf-line); border-radius: var(--bf-radius-surface); background: var(--bf-paper); box-shadow: var(--bf-shadow-float); animation: bds-component-in var(--bf-motion-disclosure) var(--bf-ease-out) both; }
+.bds-combobox__popover { position: fixed; z-index: 1000; display: flex; flex-direction: column; min-width: 0; max-width: calc(100vw - 16px); overflow: hidden; border: 1px solid var(--bf-line); border-radius: var(--bf-radius-surface); background: var(--bf-paper); box-shadow: var(--bf-shadow-float); animation: bds-component-in var(--bf-motion-disclosure) var(--bf-ease-out) both; }
 .bds-combobox__search { display: grid; grid-template-columns: 20px minmax(0, 1fr); align-items: center; gap: 7px; min-height: 43px; padding: 0 11px; border-bottom: 1px solid var(--bf-line); color: var(--bf-muted); }
 .bds-combobox__search input { min-height: 40px; padding: 0; border: 0; outline: 0; background: transparent; color: var(--bf-ink); }
-.bds-combobox__list { max-height: min(280px, 42vh); overflow-y: auto; overscroll-behavior: contain; padding: 5px; }
+.bds-combobox__list { min-height: 0; max-height: min(280px, calc(var(--bds-popover-max-height, 336px) - 44px)); overflow-y: auto; overscroll-behavior: contain; padding: 5px; scrollbar-color: var(--bf-line) transparent; }
 .bds-combobox__list [role="option"] { display: grid; grid-template-columns: 20px auto minmax(0, 1fr); align-items: center; gap: 8px; width: 100%; min-height: 42px; padding: 7px 8px; border: 0; border-radius: var(--bf-radius-control); background: transparent; color: var(--bf-ink); cursor: pointer; text-align: left; }
 .bds-combobox__list [role="option"]:hover, .bds-combobox__list [role="option"][data-active] { background: var(--bf-cool); }
 .bds-combobox__list [role="option"][aria-selected="true"] { color: var(--bf-primary); }

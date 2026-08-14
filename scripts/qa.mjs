@@ -80,6 +80,13 @@ async function desktopContract() {
   const bridgeAnimation = await page.locator(".motion-bridge-demo span").evaluate((element) => getComputedStyle(element).animationName);
   if (bridgeAnimation !== "bridge-shift") failures.push(`motion: bridge animation missing (${bridgeAnimation})`);
   await page.screenshot({ path: `${outputDir}foundations-light-desktop.png`, fullPage: true });
+  await page.getByRole("switch", { name: "Switch to dark theme" }).click();
+  await page.locator(".logo-wordmark--dark").waitFor();
+  const darkWordmarkDisplay = await page.locator(".logo-wordmark__dark-neutral").evaluate((element) => getComputedStyle(element).display);
+  if (darkWordmarkDisplay === "none") failures.push("foundations: dark-surface wordmark neutral layer did not activate");
+  await page.screenshot({ path: `${outputDir}foundations-dark-desktop.png`, fullPage: true });
+  await page.getByRole("switch", { name: "Switch to light theme" }).click();
+  await page.locator("html:not(.dark)").waitFor();
 
   await navigation.getByRole("link", { name: "Components" }).click();
   await page.getByRole("heading", { name: "See the behavior, not just the shape." }).waitFor();
@@ -99,6 +106,19 @@ async function desktopContract() {
   if (!(await cadence.textContent())?.includes("Monthly")) failures.push("forms: searchable combobox did not select a filtered option");
   const owners = page.getByRole("combobox", { name: "Account owners" });
   await owners.click();
+  const ownersListbox = page.getByRole("listbox", { name: "Account owners" });
+  const ownersPopover = await ownersListbox.evaluate((listbox) => {
+    const panel = listbox.parentElement;
+    const bounds = panel.getBoundingClientRect();
+    return {
+      bottom: bounds.bottom,
+      top: bounds.top,
+      viewportHeight: window.innerHeight,
+      listOverflow: getComputedStyle(listbox).overflowY,
+      panelPosition: getComputedStyle(panel).position,
+    };
+  });
+  if (ownersPopover.top < 7 || ownersPopover.bottom > ownersPopover.viewportHeight - 7 || ownersPopover.listOverflow !== "auto" || ownersPopover.panelPosition !== "fixed") failures.push(`forms: multi-select viewport containment failed (${JSON.stringify(ownersPopover)})`);
   await page.getByRole("searchbox", { name: "Search people" }).fill("security");
   await page.getByRole("option", { name: /Ruth Kim/ }).click();
   if (!(await owners.textContent())?.includes("+1 more")) failures.push("forms: multi-select overflow summary did not update");
@@ -117,6 +137,15 @@ async function desktopContract() {
   await page.getByRole("tabpanel").getByText("Recent notes, reviews, and status changes.").waitFor();
 
   await page.getByRole("tab", { name: "Data", exact: true }).click();
+  const stageFilter = page.getByRole("combobox", { name: "Filter by stage" });
+  await stageFilter.click();
+  const stageListbox = page.getByRole("listbox", { name: "Filter by stage" });
+  const stagePopover = await stageListbox.evaluate((listbox) => {
+    const bounds = listbox.parentElement.getBoundingClientRect();
+    return { bottom: bounds.bottom, top: bounds.top, viewportHeight: window.innerHeight, overflow: getComputedStyle(listbox).overflowY };
+  });
+  if (stagePopover.top < 7 || stagePopover.bottom > stagePopover.viewportHeight - 7 || stagePopover.overflow !== "auto") failures.push(`data: stage filter viewport containment failed (${JSON.stringify(stagePopover)})`);
+  await page.getByRole("searchbox", { name: "Search options" }).press("Escape");
   const opportunities = page.getByRole("table", { name: "Sales opportunities" });
   await opportunities.getByRole("button", { name: /Opportunity/ }).click();
   if (await opportunities.getByRole("columnheader", { name: /Opportunity/ }).getAttribute("aria-sort") !== "ascending") failures.push("data: sortable header did not expose ascending state");

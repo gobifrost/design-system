@@ -9,6 +9,7 @@ The Bifrost Design System is the operating layer for Bifrost software: dark-firs
 Evidence was captured from `gobifrost/website` at `afa9e9b4842304c54ff1b5d79d010017f1da23cb`.
 
 - Native marks are copied without reconstruction from `public/logo-square.svg`, `public/logo-lightmode.svg`, and `public/favicon.svg`.
+- The full lockup is surface-aware: light surfaces retain the website master; dark surfaces preserve the rainbow square while treating the complete wordmark as one light neutral. Never invert or recolor the bridge spectrum.
 - The default canvas is `#08090b`, the primary surface is `#0a0c0f`, and decisive action cyan is `#2fd4d4`.
 - The bridge spectrum runs red → orange → yellow → green → cyan → blue → purple → magenta. It appears as a rare, thin seam, localized route, or progress signal—not a decorative panel fill or viewport frame.
 - Inter is the interface workhorse, Prompt is reserved for brand/display moments, and JetBrains Mono carries code and measurements.

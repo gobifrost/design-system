@@ -1,12 +1,16 @@
 import {
   useEffect,
   useId,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
+  type CSSProperties,
   type KeyboardEvent,
   type ReactNode,
+  type RefObject,
 } from "react";
+import { createPortal } from "react-dom";
 import { Check, ChevronDown, LoaderCircle, Search, X } from "lucide-react";
 import "./components.css";
 
@@ -85,6 +89,85 @@ function OptionContent({ option, selected }: { option: BfComboboxOption; selecte
   );
 }
 
+interface ViewportPopoverProps {
+  anchorRef: RefObject<HTMLElement>;
+  popoverRef: RefObject<HTMLDivElement>;
+  children: ReactNode;
+}
+
+interface PopoverPosition {
+  placement: "top" | "bottom";
+  left: number;
+  top?: number;
+  bottom?: number;
+  width: number;
+  maxHeight: number;
+}
+
+function ViewportPopover({ anchorRef, popoverRef, children }: ViewportPopoverProps) {
+  const [position, setPosition] = useState<PopoverPosition>();
+
+  useLayoutEffect(() => {
+    const positionPopover = () => {
+      const anchor = anchorRef.current;
+      if (!anchor) return;
+
+      const rect = anchor.getBoundingClientRect();
+      const viewportMargin = 8;
+      const gap = 6;
+      const width = Math.min(Math.max(rect.width, 260), window.innerWidth - viewportMargin * 2);
+      const left = Math.min(
+        Math.max(rect.left, viewportMargin),
+        Math.max(viewportMargin, window.innerWidth - width - viewportMargin),
+      );
+      const spaceBelow = window.innerHeight - rect.bottom - viewportMargin;
+      const spaceAbove = rect.top - viewportMargin;
+      const placement = spaceBelow >= 220 || spaceBelow >= spaceAbove ? "bottom" : "top";
+      const availableHeight = Math.max(112, (placement === "bottom" ? spaceBelow : spaceAbove) - gap);
+
+      setPosition({
+        placement,
+        left,
+        top: placement === "bottom" ? rect.bottom + gap : undefined,
+        bottom: placement === "top" ? window.innerHeight - rect.top + gap : undefined,
+        width,
+        maxHeight: availableHeight,
+      });
+    };
+
+    positionPopover();
+    window.addEventListener("resize", positionPopover);
+    window.addEventListener("scroll", positionPopover, true);
+    return () => {
+      window.removeEventListener("resize", positionPopover);
+      window.removeEventListener("scroll", positionPopover, true);
+    };
+  }, [anchorRef]);
+
+  if (typeof document === "undefined") return null;
+
+  const style = position ? ({
+    left: position.left,
+    top: position.top,
+    bottom: position.bottom,
+    width: position.width,
+    maxHeight: position.maxHeight,
+    "--bds-popover-max-height": `${position.maxHeight}px`,
+  } as CSSProperties) : undefined;
+
+  return createPortal(
+    <div
+      ref={popoverRef}
+      className="bds-combobox__popover"
+      data-placement={position?.placement}
+      style={style}
+    >
+      {children}
+    </div>,
+    document.body,
+  );
+}
+
 export function BfCombobox({
   options,
   value,
@@ -107,6 +190,8 @@ export function BfCombobox({
   const listboxId = `${id}-listbox`;
   const messageId = `${id}-message`;
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const popoverRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -117,7 +202,8 @@ export function BfCombobox({
   useEffect(() => {
     if (!open) return;
     const closeOnOutsidePress = (event: MouseEvent) => {
-      if (!wrapperRef.current?.contains(event.target as Node)) setOpen(false);
+      const target = event.target as Node;
+      if (!wrapperRef.current?.contains(target) && !popoverRef.current?.contains(target)) setOpen(false);
     };
     document.addEventListener("mousedown", closeOnOutsidePress);
     return () => document.removeEventListener("mousedown", closeOnOutsidePress);
@@ -163,6 +249,7 @@ export function BfCombobox({
       <label className="bds-field__label" id={`${id}-label`} htmlFor={id}>{label}</label>
       {name && <input type="hidden" name={name} value={value ?? ""} />}
       <button
+        ref={triggerRef}
         id={id}
         type="button"
         className="bds-combobox__trigger"
@@ -193,7 +280,7 @@ export function BfCombobox({
         <button type="button" aria-label={`Clear ${label}`} className="bds-combobox__clear" onClick={() => onValueChange("")}><X size={14} /></button>
       )}
       {open && (
-        <div className="bds-combobox__popover">
+        <ViewportPopover anchorRef={triggerRef} popoverRef={popoverRef}>
           <div className="bds-combobox__search">
             <Search size={15} aria-hidden="true" />
             <input
@@ -226,7 +313,7 @@ export function BfCombobox({
               ><OptionContent option={option} selected={option.value === value} /></button>
             )) : <p className="bds-combobox__empty">{emptyText}</p>}
           </div>
-        </div>
+        </ViewportPopover>
       )}
       <FieldMessage id={messageId} error={error} hint={hint} />
     </div>
@@ -257,6 +344,8 @@ export function BfMultiSelect({
   const listboxId = `${id}-listbox`;
   const messageId = `${id}-message`;
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
+  const popoverRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -270,7 +359,8 @@ export function BfMultiSelect({
   useEffect(() => {
     if (!open) return;
     const closeOnOutsidePress = (event: MouseEvent) => {
-      if (!wrapperRef.current?.contains(event.target as Node)) setOpen(false);
+      const target = event.target as Node;
+      if (!wrapperRef.current?.contains(target) && !popoverRef.current?.contains(target)) setOpen(false);
     };
     document.addEventListener("mousedown", closeOnOutsidePress);
     return () => document.removeEventListener("mousedown", closeOnOutsidePress);
@@ -321,6 +411,7 @@ export function BfMultiSelect({
       <label className="bds-field__label" id={`${id}-label`} htmlFor={id}>{label}</label>
       {name && value.map((selectedValue) => <input key={selectedValue} type="hidden" name={name} value={selectedValue} />)}
       <div
+        ref={triggerRef}
         id={id}
         className="bds-combobox__trigger"
         role="combobox"
@@ -362,7 +453,7 @@ export function BfMultiSelect({
         <ChevronDown size={15} aria-hidden="true" />
       </div>
       {open && (
-        <div className="bds-combobox__popover">
+        <ViewportPopover anchorRef={triggerRef} popoverRef={popoverRef}>
           <div className="bds-combobox__search">
             <Search size={15} aria-hidden="true" />
             <input
@@ -405,7 +496,7 @@ export function BfMultiSelect({
               );
             }) : <p className="bds-combobox__empty">{emptyText}</p>}
           </div>
-        </div>
+        </ViewportPopover>
       )}
       <FieldMessage id={messageId} error={error} hint={hint} />
     </div>
