@@ -10,10 +10,10 @@ node scripts/add.mjs button --root /path/to/consumer-app
 
 The command resolves registry dependencies and writes to `src/components/bifrost/`. It never edits an existing file unless that file is one of the selected registry targets, so review the diff before committing.
 
-Import the token layer once near the app entry:
+Registry components import their shared stylesheet directly. If an app wants to establish the theme before any component renders, import the component layer once near the app entry:
 
 ```ts
-import "./components/bifrost/tokens.css";
+import "./components/bifrost/components.css";
 ```
 
 Then use the copied source directly:
@@ -25,6 +25,8 @@ export function SaveAction() {
   return <BfButton>Save changes</BfButton>;
 }
 ```
+
+Use `field` for native text, textarea, and short fixed-list controls. Use `combobox` when the list must be visually consistent, searchable, descriptive, async-aware, or multi-select. Use `data-table` for production entity tables; it owns the constrained scroller and keeps its footer outside that scroller.
 
 ## Hosted registry output
 

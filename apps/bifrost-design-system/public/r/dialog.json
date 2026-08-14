@@ -3,7 +3,7 @@
   "type": "registry:ui",
   "description": "Bounded native dialog with Escape, backdrop dismissal, and contained body scrolling.",
   "registryDependencies": [
-    "tokens"
+    "styles"
   ],
   "dependencies": [
     "lucide-react"
@@ -12,7 +12,7 @@
     {
       "path": "src/components/bifrost/BfDialog.tsx",
       "type": "registry:ui",
-      "content": "import { X } from \"lucide-react\";\nimport type { ReactNode } from \"react\";\nimport { useEffect, useRef } from \"react\";\n\nexport function BfDialog({ open, onOpenChange, title, description, children, footer }: { open: boolean; onOpenChange: (open: boolean) => void; title: string; description?: string; children: ReactNode; footer?: ReactNode }) {\n  const dialogRef = useRef<HTMLDialogElement>(null);\n\n  useEffect(() => {\n    const dialog = dialogRef.current;\n    if (!dialog) return;\n    if (open && !dialog.open) dialog.showModal();\n    if (!open && dialog.open) dialog.close();\n  }, [open]);\n\n  return (\n    <dialog ref={dialogRef} className=\"bds-dialog\" onCancel={(event) => { event.preventDefault(); onOpenChange(false); }} onClose={() => onOpenChange(false)} onClick={(event) => { if (event.target === event.currentTarget) onOpenChange(false); }}>\n      <div className=\"bds-dialog__surface\">\n        <header><div><h3>{title}</h3>{description && <p>{description}</p>}</div><button type=\"button\" aria-label=\"Close dialog\" onClick={() => onOpenChange(false)}><X size={18} /></button></header>\n        <div className=\"bds-dialog__body\">{children}</div>\n        {footer && <footer>{footer}</footer>}\n      </div>\n    </dialog>\n  );\n}\n"
+      "content": "import { X } from \"lucide-react\";\nimport type { ReactNode } from \"react\";\nimport { useEffect, useRef } from \"react\";\nimport \"./components.css\";\n\nexport function BfDialog({ open, onOpenChange, title, description, children, footer }: { open: boolean; onOpenChange: (open: boolean) => void; title: string; description?: string; children: ReactNode; footer?: ReactNode }) {\n  const dialogRef = useRef<HTMLDialogElement>(null);\n\n  useEffect(() => {\n    const dialog = dialogRef.current;\n    if (!dialog) return;\n    if (open && !dialog.open) dialog.showModal();\n    if (!open && dialog.open) dialog.close();\n  }, [open]);\n\n  return (\n    <dialog ref={dialogRef} className=\"bds-dialog\" onCancel={(event) => { event.preventDefault(); onOpenChange(false); }} onClose={() => onOpenChange(false)} onClick={(event) => { if (event.target === event.currentTarget) onOpenChange(false); }}>\n      <div className=\"bds-dialog__surface\">\n        <header><div><h3>{title}</h3>{description && <p>{description}</p>}</div><button type=\"button\" aria-label=\"Close dialog\" onClick={() => onOpenChange(false)}><X size={18} /></button></header>\n        <div className=\"bds-dialog__body\">{children}</div>\n        {footer && <footer>{footer}</footer>}\n      </div>\n    </dialog>\n  );\n}\n"
     }
   ]
 }

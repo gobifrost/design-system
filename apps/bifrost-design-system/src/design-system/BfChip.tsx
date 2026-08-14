@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import "./components.css";
 
 type ChipTone = "neutral" | "success" | "warning" | "danger" | "info";
 

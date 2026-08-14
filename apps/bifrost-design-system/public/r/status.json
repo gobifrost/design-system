@@ -3,13 +3,13 @@
   "type": "registry:ui",
   "description": "Non-interactive status label with redundant shape, text, and color.",
   "registryDependencies": [
-    "tokens"
+    "styles"
   ],
   "files": [
     {
       "path": "src/components/bifrost/BfChip.tsx",
       "type": "registry:ui",
-      "content": "import type { ReactNode } from \"react\";\n\ntype ChipTone = \"neutral\" | \"success\" | \"warning\" | \"danger\" | \"info\";\n\nexport function BfChip({ children, tone = \"neutral\" }: { children: ReactNode; tone?: ChipTone }) {\n  return <span className={`bds-chip bds-chip--${tone}`}>{children}</span>;\n}\n"
+      "content": "import type { ReactNode } from \"react\";\nimport \"./components.css\";\n\ntype ChipTone = \"neutral\" | \"success\" | \"warning\" | \"danger\" | \"info\";\n\nexport function BfChip({ children, tone = \"neutral\" }: { children: ReactNode; tone?: ChipTone }) {\n  return <span className={`bds-chip bds-chip--${tone}`}>{children}</span>;\n}\n"
     }
   ]
 }

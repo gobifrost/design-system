@@ -8,8 +8,10 @@ import { PageIntro } from "../components/PageIntro";
 import { BfAlert } from "../design-system/BfAlert";
 import { BfButton } from "../design-system/BfButton";
 import { BfChip } from "../design-system/BfChip";
+import { BfCombobox, BfMultiSelect, type BfComboboxOption } from "../design-system/BfCombobox";
+import { BfDataTable, type BfDataColumn } from "../design-system/BfDataTable";
 import { BfDialog } from "../design-system/BfDialog";
-import { BfSelect, BfTextarea, BfTextField } from "../design-system/BfField";
+import { BfTextarea, BfTextField } from "../design-system/BfField";
 import { BfCheckbox, BfRadioGroup, BfSwitch } from "../design-system/BfSelection";
 import { BfTabs } from "../design-system/BfTabs";
 
@@ -23,7 +25,7 @@ const catalog: Record<ComponentName, { note: string; properties: Array<[string, 
   Status: { note: "Status labels describe state with text and a square signal. They have no capsule or background and never imply interaction.", properties: [["Signal", "6px square"], ["Surface", "none"], ["Behavior", "read-only"]], do: "Pair every status color with a clear label.", dont: "Do not use status color as decoration." },
   Navigation: { note: "Local navigation preserves context. Tabs switch peer views; breadcrumbs show ancestry; pagination changes a bounded result set.", properties: [["Tabs", "equal peers"], ["Trail", "ancestry"], ["Pages", "bounded set"]], do: "Keep the current location visible in every navigation form.", dont: "Do not use tabs as a substitute for a multi-step workflow." },
   Feedback: { note: "Feedback is proportional to consequence. Inline messages stay near the work; banners summarize; empty states provide one useful next step.", properties: [["Info", "polite status"], ["Error", "alert"], ["Empty", "next action"]], do: "Name both what happened and what the user can do.", dont: "Do not show success feedback before the action completes." },
-  Data: { note: "Tables support comparison through stable columns, aligned values, clear row actions, and pagination that never hides the current range.", properties: [["Row", "density token"], ["Numbers", "tabular"], ["Actions", "last column"]], do: "Keep column meaning visible while values scan vertically.", dont: "Do not center values that need comparison." },
+  Data: { note: "The production table owns scrolling, sticky headers, sorting, selection, row activation, loading, empty, error, and pinned pagination states. Toolbars compose search and filters without changing table semantics.", properties: [["Scroll", "owned + capped"], ["Header", "sticky + sortable"], ["Rows", "selectable + navigable"]], do: "Keep state and column meaning visible while values scan vertically.", dont: "Do not rebuild selection, loading, or pagination ad hoc in each screen." },
   Overlay: { note: "Menus expose nearby actions. Dialogs interrupt only for focused decisions that must complete or be dismissed before returning.", properties: [["Menu", "local actions"], ["Dialog", "modal focus"], ["Dismiss", "Esc + close"]], do: "Return focus and context after dismissal.", dont: "Do not put ordinary page content in a modal." },
   Motion: { note: "Quiet machinery explains what changed. Pages settle, disclosure preserves spatial continuity, controls acknowledge input, and loading alone may loop.", properties: [["Feedback", "120ms"], ["Disclosure", "220ms"], ["Route", "360ms max"]], do: "Use motion to preserve continuity or confirm a state change.", dont: "Do not animate static decoration or make routine work wait." },
 };
@@ -91,16 +93,32 @@ function ActionSpecimen() {
 }
 
 function FormSpecimen() {
+  const [cadence, setCadence] = useState("quarterly");
+  const [owners, setOwners] = useState(["maya", "jon"]);
   return (
     <form className="form-specimen" onSubmit={(event) => event.preventDefault()}>
       <BfTextField label="Client name" defaultValue="Northwind Logistics" />
       <BfTextField label="Primary contact" leadingIcon={<Search size={15} />} placeholder="Search people" hint="Choose someone who can approve the plan." />
-      <BfSelect label="Review cadence" defaultValue="quarterly" options={[{ value: "monthly", label: "Monthly" }, { value: "quarterly", label: "Quarterly" }, { value: "annual", label: "Annual" }]} />
+      <BfCombobox label="Review cadence" value={cadence} onValueChange={setCadence} searchPlaceholder="Search cadences" options={cadenceOptions} />
       <BfTextField label="Review date" defaultValue="Not a date" error="Use a date like Aug 21, 2026." />
+      <BfMultiSelect className="form-specimen__wide" label="Account owners" value={owners} onValueChange={setOwners} searchPlaceholder="Search people" options={ownerOptions} hint="Search, select several, or remove a person from the trigger." />
       <BfTextarea className="form-specimen__wide" label="Internal note" rows={3} defaultValue="Confirm the security roadmap before the client review." hint="Visible to Bifrost team members only." />
     </form>
   );
 }
+
+const cadenceOptions: BfComboboxOption[] = [
+  { value: "monthly", label: "Monthly", description: "A high-touch operating rhythm" },
+  { value: "quarterly", label: "Quarterly", description: "Recommended for active accounts" },
+  { value: "annual", label: "Annual", description: "For stable, low-change accounts" },
+];
+
+const ownerOptions: BfComboboxOption[] = [
+  { value: "maya", label: "Maya Patel", description: "Account owner", keywords: ["strategy"] },
+  { value: "jon", label: "Jon Bell", description: "Technical lead", keywords: ["engineering"] },
+  { value: "ruth", label: "Ruth Kim", description: "Security lead", keywords: ["risk"] },
+  { value: "diego", label: "Diego Alvarez", description: "Client success", keywords: ["relationship"] },
+];
 
 function SelectionSpecimen() {
   const [included, setIncluded] = useState(true);
@@ -152,21 +170,70 @@ function FeedbackSpecimen() {
   );
 }
 
-const dataRows = [
-  ["Cloud readiness", "Discovery", "$18,400", "info"],
-  ["Security uplift", "Approved", "$31,200", "success"],
-  ["Device lifecycle", "Draft", "$12,750", "neutral"],
-  ["Backup modernization", "Review", "$9,800", "warning"],
-  ["Identity hardening", "At risk", "$21,600", "danger"],
-] as const;
+type Opportunity = {
+  id: string;
+  name: string;
+  account: string;
+  stage: "Discovery" | "Approved" | "Draft" | "Review" | "At risk";
+  value: number;
+  owner: string;
+};
+
+const dataRows: Opportunity[] = [
+  { id: "opp-1", name: "Cloud readiness", account: "Northwind Logistics", stage: "Discovery", value: 18400, owner: "Maya Patel" },
+  { id: "opp-2", name: "Security uplift", account: "Gray & Finch", stage: "Approved", value: 31200, owner: "Ruth Kim" },
+  { id: "opp-3", name: "Device lifecycle", account: "Arbor Studio", stage: "Draft", value: 12750, owner: "Jon Bell" },
+  { id: "opp-4", name: "Backup modernization", account: "Morrow Health", stage: "Review", value: 9800, owner: "Diego Alvarez" },
+  { id: "opp-5", name: "Identity hardening", account: "Northwind Logistics", stage: "At risk", value: 21600, owner: "Ruth Kim" },
+  { id: "opp-6", name: "Branch connectivity", account: "Gray & Finch", stage: "Approved", value: 14600, owner: "Maya Patel" },
+  { id: "opp-7", name: "Compliance evidence", account: "Morrow Health", stage: "Discovery", value: 8900, owner: "Jon Bell" },
+];
+
+const stageTone = { Discovery: "info", Approved: "success", Draft: "neutral", Review: "warning", "At risk": "danger" } as const;
+const stageOptions: BfComboboxOption[] = Object.keys(stageTone).map((stage) => ({ value: stage, label: stage }));
+const dataColumns: BfDataColumn<Opportunity>[] = [
+  { id: "name", header: "Opportunity", width: "16rem", sortable: true, sortValue: (row) => row.name, cell: (row) => <span className="data-row-name"><strong>{row.name}</strong><small>{row.account}</small></span> },
+  { id: "stage", header: "Stage", width: "8.5rem", sortable: true, sortValue: (row) => row.stage, cell: (row) => <BfChip tone={stageTone[row.stage]}>{row.stage}</BfChip> },
+  { id: "owner", header: "Owner", width: "8rem", sortable: true, accessor: "owner" },
+  { id: "value", header: "Value", width: "6.5rem", align: "end", sortable: true, sortValue: (row) => row.value, cell: (row) => `$${row.value.toLocaleString()}` },
+  { id: "action", header: <span className="sr-only">Open</span>, width: "2.5rem", align: "end", cell: (row) => <button type="button" className="data-row-action" aria-label={`Open ${row.name}`}><ArrowRight size={15} /></button> },
+];
 
 function DataSpecimen() {
   const [page, setPage] = useState(1);
-  const pageRows = dataRows.slice((page - 1) * 3, page * 3);
+  const [query, setQuery] = useState("");
+  const [stages, setStages] = useState<string[]>([]);
+  const [selected, setSelected] = useState<string[]>([]);
+  const [lastOpened, setLastOpened] = useState<string>();
+  const filtered = dataRows.filter((row) => {
+    const matchesQuery = `${row.name} ${row.account} ${row.owner}`.toLocaleLowerCase().includes(query.toLocaleLowerCase());
+    return matchesQuery && (!stages.length || stages.includes(row.stage));
+  });
+  const pageSize = 4;
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const safePage = Math.min(page, totalPages);
+  const pageRows = filtered.slice((safePage - 1) * pageSize, safePage * pageSize);
   return (
     <div className="data-specimen">
-      <div className="full-table"><div className="full-table-row full-table-head"><span>Opportunity</span><span>Stage</span><span>Value</span><span /></div>{pageRows.map(([name, stage, value, tone]) => <div className="full-table-row" key={name}><strong>{name}</strong><BfChip tone={tone}>{stage}</BfChip><span>{value}</span><button type="button" aria-label={`Open ${name}`}><ArrowRight size={15} /></button></div>)}</div>
-      <div className="table-footer"><span>Showing {(page - 1) * 3 + 1}–{Math.min(page * 3, dataRows.length)} of {dataRows.length}</span><div><button type="button" aria-label="Previous results" disabled={page === 1} onClick={() => setPage(1)}><ArrowLeft size={15} /></button><button type="button" aria-label="Next results" disabled={page === 2} onClick={() => setPage(2)}><ArrowRight size={15} /></button></div></div>
+      <BfDataTable
+        ariaLabel="Sales opportunities"
+        rows={pageRows}
+        columns={dataColumns}
+        getRowId={(row) => row.id}
+        defaultSort={{ columnId: "value", direction: "descending" }}
+        selection="multiple"
+        selectedRowIds={selected}
+        onSelectionChange={setSelected}
+        onRowActivate={(row) => setLastOpened(row.name)}
+        emptyState={{ title: "No matching opportunities", description: "Change the search or stage filters to widen the result set.", action: <BfButton variant="secondary" onClick={() => { setQuery(""); setStages([]); }}>Clear filters</BfButton> }}
+        toolbar={<>
+          <BfTextField className="data-toolbar-search" label="Search opportunities" value={query} onChange={(event) => { setQuery(event.target.value); setPage(1); }} leadingIcon={<Search size={15} />} placeholder="Search opportunities" />
+          <BfMultiSelect className="data-toolbar-filter" label="Filter by stage" value={stages} onValueChange={(next) => { setStages(next); setPage(1); }} options={stageOptions} placeholder="All stages" maxDisplayedItems={1} showBulkActions={false} />
+        </>}
+        footer={<span>{selected.length ? `${selected.length} selected across results` : lastOpened ? `Opened ${lastOpened}` : "Select rows for bulk actions"}</span>}
+        pagination={{ page: safePage, pageSize, total: filtered.length, onPageChange: setPage }}
+        maxHeight="25rem"
+      />
     </div>
   );
 }

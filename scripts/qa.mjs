@@ -92,6 +92,18 @@ async function desktopContract() {
   await page.getByRole("tab", { name: "Forms", exact: true }).click();
   const invalidField = page.getByLabel("Review date");
   if (await invalidField.getAttribute("aria-invalid") !== "true") failures.push("forms: invalid state is not programmatic");
+  const cadence = page.getByRole("combobox", { name: "Review cadence" });
+  await cadence.click();
+  await page.getByRole("searchbox", { name: "Search cadences" }).fill("high touch");
+  await page.getByRole("option", { name: /Monthly/ }).click();
+  if (!(await cadence.textContent())?.includes("Monthly")) failures.push("forms: searchable combobox did not select a filtered option");
+  const owners = page.getByRole("combobox", { name: "Account owners" });
+  await owners.click();
+  await page.getByRole("searchbox", { name: "Search people" }).fill("security");
+  await page.getByRole("option", { name: /Ruth Kim/ }).click();
+  if (!(await owners.textContent())?.includes("+1 more")) failures.push("forms: multi-select overflow summary did not update");
+  await page.locator(".workbench").screenshot({ path: `${outputDir}components-forms-search-light-desktop.png` });
+  await page.getByRole("searchbox", { name: "Search people" }).press("Escape");
 
   await page.getByRole("tab", { name: "Selection", exact: true }).click();
   const reminder = page.getByRole("switch", { name: "Review reminders" });
@@ -105,8 +117,16 @@ async function desktopContract() {
   await page.getByRole("tabpanel").getByText("Recent notes, reviews, and status changes.").waitFor();
 
   await page.getByRole("tab", { name: "Data", exact: true }).click();
-  await page.getByRole("button", { name: "Next results" }).click();
-  await page.getByText("Backup modernization").waitFor();
+  const opportunities = page.getByRole("table", { name: "Sales opportunities" });
+  await opportunities.getByRole("button", { name: /Opportunity/ }).click();
+  if (await opportunities.getByRole("columnheader", { name: /Opportunity/ }).getAttribute("aria-sort") !== "ascending") failures.push("data: sortable header did not expose ascending state");
+  await opportunities.getByRole("checkbox", { name: "Select all visible rows" }).click();
+  if (!(await page.getByText(/4 selected/).isVisible())) failures.push("data: visible-row bulk selection did not update");
+  await page.getByRole("button", { name: "Next page" }).click();
+  await opportunities.getByText("Compliance evidence").waitFor();
+  await page.getByLabel("Search opportunities").fill("identity");
+  await opportunities.getByText("Identity hardening").waitFor();
+  await page.screenshot({ path: `${outputDir}components-data-light-desktop.png`, fullPage: true });
 
   await page.getByRole("tab", { name: "Overlay", exact: true }).click();
   await page.getByRole("button", { name: "Account actions" }).click();

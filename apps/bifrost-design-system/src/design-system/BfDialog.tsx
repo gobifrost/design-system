@@ -1,6 +1,7 @@
 import { X } from "lucide-react";
 import type { ReactNode } from "react";
 import { useEffect, useRef } from "react";
+import "./components.css";
 
 export function BfDialog({ open, onOpenChange, title, description, children, footer }: { open: boolean; onOpenChange: (open: boolean) => void; title: string; description?: string; children: ReactNode; footer?: ReactNode }) {
   const dialogRef = useRef<HTMLDialogElement>(null);

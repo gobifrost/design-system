@@ -1,4 +1,5 @@
 import type { KeyboardEvent } from "react";
+import "./components.css";
 
 export type BfTab = { id: string; label: string };
 

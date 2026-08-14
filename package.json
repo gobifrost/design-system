@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "registry:build": "node scripts/build-registry.mjs",
+    "test:registry": "node --test scripts/add.test.mjs",
     "qa": "node scripts/qa.mjs"
   }
 }

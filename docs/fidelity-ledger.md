@@ -8,7 +8,7 @@
 | --- | --- | --- | --- |
 | Global silhouette | Narrow chromatic rail, broad work field, right guide | 248px rail, responsive center field, 300px guide; single stable content scroller | Faithful, with more readable navigation labels |
 | First-viewport hierarchy | Oversized Bifrost thesis and two actions | Same thesis, Prompt-led display scale, one cyan action and one bounded secondary | Faithful |
-| Brand signature | Native mark plus a thin full-spectrum edge | Website-native square mark and an 8-stop vertical/horizontal bridge seam | Faithful |
+| Brand signature | Native mark plus a thin full-spectrum edge | Website-native square mark, a dim feathered rail seam, and one localized 340px bridge transition; no viewport frame | Faithful, quieter after critique |
 | Live specimens | Flat bordered rows for action, status, input, navigation, feedback | Interactive code-native rows with live density, status redundancy, and real control spacing | Improved from static concept |
 | Right guide | Orientation, install command, and resource links | Start-building command, field-guide routes, and source-ownership note | Faithful, adapted to the local source registry |
 | Shape language | Decisive low-radius controls and square content surfaces | 6px controls, 4px surfaces, flat status, hairline hierarchy | Faithful without brittle zero-radius controls |
@@ -25,6 +25,7 @@
 - The finish review found click-only ARIA tab/radio selectors; roving focus plus Arrow/Home/End behavior now ships in BfTabs, DensityControl, and the component-family workbench.
 - The source-install command now wraps in place instead of hiding its target behind an ellipsis.
 - The mobile nine-family selector now stays on one horizontally scrollable peer row instead of wrapping into a hard-to-scan second row.
+- The fixed bottom spectrum edge was removed. The rail seam is static, 2px, dimmed, and feathered; the only horizontal spectrum is a short website-derived bridge transition between orientation and applied patterns.
 
 ## Validation record
 

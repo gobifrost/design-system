@@ -32,10 +32,17 @@ function collect(item) {
 collect(selected);
 
 const collisions = [];
+const identical = new Set();
 for (const file of files) {
   try {
-    await access(join(consumerRoot, file.target));
-    collisions.push(file.target);
+    const target = join(consumerRoot, file.target);
+    await access(target);
+    const [existingContent, sourceContent] = await Promise.all([
+      readFile(target),
+      readFile(join(repoRoot, file.path)),
+    ]);
+    if (existingContent.equals(sourceContent)) identical.add(file.target);
+    else collisions.push(file.target);
   } catch {
     // The target is free to create.
   }
@@ -47,6 +54,10 @@ if (collisions.length) {
 }
 
 for (const file of files) {
+    if (identical.has(file.target)) {
+      console.log(`kept ${file.target} (identical)`);
+      continue;
+    }
     const target = join(consumerRoot, file.target);
     await mkdir(dirname(target), { recursive: true });
     await copyFile(join(repoRoot, file.path), target);

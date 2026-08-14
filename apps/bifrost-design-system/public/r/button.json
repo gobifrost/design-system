@@ -3,14 +3,14 @@
   "type": "registry:ui",
   "description": "Action hierarchy with loading, disabled, icon, and destructive states.",
   "registryDependencies": [
-    "tokens",
+    "styles",
     "types"
   ],
   "files": [
     {
       "path": "src/components/bifrost/BfButton.tsx",
       "type": "registry:ui",
-      "content": "import type { ButtonHTMLAttributes, ReactNode } from \"react\";\nimport type { ButtonVariant } from \"./types\";\n\ninterface BfButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {\n  variant?: ButtonVariant;\n  icon?: ReactNode;\n  trailingIcon?: ReactNode;\n}\n\nexport function BfButton({ variant = \"primary\", icon, trailingIcon, className = \"\", children, ...props }: BfButtonProps) {\n  return (\n    <button className={`bds-button bds-button--${variant} ${className}`.trim()} {...props}>\n      {icon && <span className=\"bds-button__icon\" aria-hidden=\"true\">{icon}</span>}\n      <span>{children}</span>\n      {trailingIcon && <span className=\"bds-button__icon\" aria-hidden=\"true\">{trailingIcon}</span>}\n    </button>\n  );\n}\n"
+      "content": "import type { ButtonHTMLAttributes, ReactNode } from \"react\";\nimport type { ButtonVariant } from \"./types\";\nimport \"./components.css\";\n\ninterface BfButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {\n  variant?: ButtonVariant;\n  icon?: ReactNode;\n  trailingIcon?: ReactNode;\n}\n\nexport function BfButton({ variant = \"primary\", icon, trailingIcon, className = \"\", children, ...props }: BfButtonProps) {\n  return (\n    <button className={`bds-button bds-button--${variant} ${className}`.trim()} {...props}>\n      {icon && <span className=\"bds-button__icon\" aria-hidden=\"true\">{icon}</span>}\n      <span>{children}</span>\n      {trailingIcon && <span className=\"bds-button__icon\" aria-hidden=\"true\">{trailingIcon}</span>}\n    </button>\n  );\n}\n"
     }
   ]
 }

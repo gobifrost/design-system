@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import "./components.css";
 
 export function BfCheckbox({ checked, onChange, children, disabled = false }: { checked: boolean; onChange: (checked: boolean) => void; children: ReactNode; disabled?: boolean }) {
   return (

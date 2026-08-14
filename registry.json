@@ -10,6 +10,13 @@
       "files": [{ "path": "apps/bifrost-design-system/src/design-system/tokens.css", "target": "src/components/bifrost/tokens.css", "type": "registry:style" }]
     },
     {
+      "name": "styles",
+      "type": "registry:style",
+      "description": "Production component styles wired to the Bifrost token contract.",
+      "registryDependencies": ["tokens"],
+      "files": [{ "path": "apps/bifrost-design-system/src/design-system/components.css", "target": "src/components/bifrost/components.css", "type": "registry:style" }]
+    },
+    {
       "name": "types",
       "type": "registry:lib",
       "description": "Shared Bifrost component types.",
@@ -19,42 +26,50 @@
       "name": "button",
       "type": "registry:ui",
       "description": "Action hierarchy with loading, disabled, icon, and destructive states.",
-      "registryDependencies": ["tokens", "types"],
+      "registryDependencies": ["styles", "types"],
       "files": [{ "path": "apps/bifrost-design-system/src/design-system/BfButton.tsx", "target": "src/components/bifrost/BfButton.tsx", "type": "registry:ui" }]
     },
     {
       "name": "field",
       "type": "registry:ui",
-      "description": "Text, select, and textarea fields with persistent labels and linked messages.",
-      "registryDependencies": ["tokens"],
+      "description": "Text, native select, and textarea fields with persistent labels and linked messages.",
+      "registryDependencies": ["styles"],
       "files": [{ "path": "apps/bifrost-design-system/src/design-system/BfField.tsx", "target": "src/components/bifrost/BfField.tsx", "type": "registry:ui" }]
+    },
+    {
+      "name": "combobox",
+      "type": "registry:ui",
+      "description": "Searchable single- and multi-select fields with keywords, bulk actions, loading, empty, disabled, error, and form states.",
+      "registryDependencies": ["styles"],
+      "dependencies": ["lucide-react"],
+      "files": [{ "path": "apps/bifrost-design-system/src/design-system/BfCombobox.tsx", "target": "src/components/bifrost/BfCombobox.tsx", "type": "registry:ui" }]
     },
     {
       "name": "selection",
       "type": "registry:ui",
       "description": "Checkbox, radio, and immediate-setting switch controls.",
-      "registryDependencies": ["tokens"],
+      "registryDependencies": ["styles"],
       "files": [{ "path": "apps/bifrost-design-system/src/design-system/BfSelection.tsx", "target": "src/components/bifrost/BfSelection.tsx", "type": "registry:ui" }]
     },
     {
       "name": "tabs",
       "type": "registry:ui",
       "description": "Peer-view navigation with content and equal distribution.",
-      "registryDependencies": ["tokens"],
+      "registryDependencies": ["styles"],
       "files": [{ "path": "apps/bifrost-design-system/src/design-system/BfTabs.tsx", "target": "src/components/bifrost/BfTabs.tsx", "type": "registry:ui" }]
     },
     {
       "name": "status",
       "type": "registry:ui",
       "description": "Non-interactive status label with redundant shape, text, and color.",
-      "registryDependencies": ["tokens"],
+      "registryDependencies": ["styles"],
       "files": [{ "path": "apps/bifrost-design-system/src/design-system/BfChip.tsx", "target": "src/components/bifrost/BfChip.tsx", "type": "registry:ui" }]
     },
     {
       "name": "alert",
       "type": "registry:ui",
       "description": "Inline feedback with semantic roles, recovery copy, and optional action.",
-      "registryDependencies": ["tokens"],
+      "registryDependencies": ["styles"],
       "dependencies": ["lucide-react"],
       "files": [{ "path": "apps/bifrost-design-system/src/design-system/BfAlert.tsx", "target": "src/components/bifrost/BfAlert.tsx", "type": "registry:ui" }]
     },
@@ -62,9 +77,17 @@
       "name": "dialog",
       "type": "registry:ui",
       "description": "Bounded native dialog with Escape, backdrop dismissal, and contained body scrolling.",
-      "registryDependencies": ["tokens"],
+      "registryDependencies": ["styles"],
       "dependencies": ["lucide-react"],
       "files": [{ "path": "apps/bifrost-design-system/src/design-system/BfDialog.tsx", "target": "src/components/bifrost/BfDialog.tsx", "type": "registry:ui" }]
+    },
+    {
+      "name": "data-table",
+      "type": "registry:ui",
+      "description": "Typed semantic data table with owned scrolling, sticky headers, sorting, selection, row navigation, state coverage, and pinned pagination.",
+      "registryDependencies": ["styles", "button"],
+      "dependencies": ["lucide-react"],
+      "files": [{ "path": "apps/bifrost-design-system/src/design-system/BfDataTable.tsx", "target": "src/components/bifrost/BfDataTable.tsx", "type": "registry:ui" }]
     },
     {
       "name": "brand-mark",
