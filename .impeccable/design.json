@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-14T00:00:00-04:00",
+  "title": "Bifrost Design System",
+  "northStar": "Chromatic Rail",
+  "brandBaseline": {
+    "repository": "gobifrost/website",
+    "commit": "afa9e9b4842304c54ff1b5d79d010017f1da23cb",
+    "assets": ["logo-square.svg", "logo-lightmode.svg", "favicon.svg"]
+  },
+  "tokens": {
+    "canvasDark": "#08090b",
+    "surfaceDark": "#0a0c0f",
+    "primaryDark": "#2fd4d4",
+    "primaryLight": "#087f86",
+    "fonts": ["Inter", "Prompt", "JetBrains Mono"],
+    "radii": { "control": "6px", "surface": "4px", "feature": "8px" },
+    "motion": { "feedback": "120ms", "disclosure": "220ms", "route": "360ms", "progress": "1600ms" }
+  },
+  "principles": [
+    "Structure carries density",
+    "Cyan is a decision",
+    "The bridge communicates connection",
+    "State is redundant by design",
+    "Motion preserves causality",
+    "Source ownership beats lock-in"
+  ],
+  "distribution": {
+    "model": "source registry",
+    "manifest": "registry.json",
+    "builder": "scripts/build-registry.mjs",
+    "copier": "scripts/add.mjs"
+  }
+}

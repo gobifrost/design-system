@@ -1,0 +1,12 @@
+{
+  "name": "types",
+  "type": "registry:lib",
+  "description": "Shared Bifrost component types.",
+  "files": [
+    {
+      "path": "src/components/bifrost/types.ts",
+      "type": "registry:lib",
+      "content": "export type Density = \"compact\" | \"comfortable\" | \"spacious\";\nexport type ButtonVariant = \"primary\" | \"secondary\" | \"ghost\" | \"danger\";\n"
+    }
+  ]
+}

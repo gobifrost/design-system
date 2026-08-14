@@ -1,0 +1,11 @@
+apps:
+  665fd7ae-5052-4711-b196-3d6c0166c5e4:
+    id: 665fd7ae-5052-4711-b196-3d6c0166c5e4
+    slug: bifrost-design-system
+    name: Bifrost Design System
+    description: The shared visual language, components, and application patterns for Bifrost-branded software.
+    path: apps/bifrost-design-system
+    logo: public/brand/logo-square.svg
+    app_model: standalone_v2
+    access_level: authenticated
+    roles: []

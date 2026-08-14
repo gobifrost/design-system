@@ -1,0 +1,9 @@
+{
+  "name": "@gobifrost/design-system-workspace",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "registry:build": "node scripts/build-registry.mjs",
+    "qa": "node scripts/qa.mjs"
+  }
+}

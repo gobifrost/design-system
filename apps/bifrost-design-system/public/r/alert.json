@@ -1,0 +1,18 @@
+{
+  "name": "alert",
+  "type": "registry:ui",
+  "description": "Inline feedback with semantic roles, recovery copy, and optional action.",
+  "registryDependencies": [
+    "tokens"
+  ],
+  "dependencies": [
+    "lucide-react"
+  ],
+  "files": [
+    {
+      "path": "src/components/bifrost/BfAlert.tsx",
+      "type": "registry:ui",
+      "content": "import { AlertCircle, AlertTriangle, CheckCircle2, Info } from \"lucide-react\";\nimport type { ReactNode } from \"react\";\n\ntype AlertTone = \"info\" | \"success\" | \"warning\" | \"danger\";\n\nconst icons = {\n  info: Info,\n  success: CheckCircle2,\n  warning: AlertTriangle,\n  danger: AlertCircle,\n};\n\nexport function BfAlert({ tone = \"info\", title, children, action }: { tone?: AlertTone; title: string; children: ReactNode; action?: ReactNode }) {\n  const Icon = icons[tone];\n  return (\n    <div className={`bds-alert bds-alert--${tone}`} role={tone === \"danger\" ? \"alert\" : \"status\"}>\n      <Icon size={18} aria-hidden=\"true\" />\n      <div><strong>{title}</strong><p>{children}</p></div>\n      {action && <div className=\"bds-alert__action\">{action}</div>}\n    </div>\n  );\n}\n"
+    }
+  ]
+}

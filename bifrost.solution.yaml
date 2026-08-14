@@ -1,0 +1,8 @@
+slug: bifrost-design-system
+name: Bifrost Design System
+version: 0.1.0
+global_repo_access: false
+git_connected: false
+git_repo_url: https://github.com/gobifrost/design-system.git
+git_ref: main
+logo: apps/bifrost-design-system/public/brand/logo-square.svg

@@ -1,0 +1,15 @@
+{
+  "name": "field",
+  "type": "registry:ui",
+  "description": "Text, select, and textarea fields with persistent labels and linked messages.",
+  "registryDependencies": [
+    "tokens"
+  ],
+  "files": [
+    {
+      "path": "src/components/bifrost/BfField.tsx",
+      "type": "registry:ui",
+      "content": "import type { InputHTMLAttributes, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes } from \"react\";\nimport { useId } from \"react\";\n\ntype FieldChrome = {\n  label: string;\n  hint?: string;\n  error?: string;\n  leadingIcon?: ReactNode;\n};\n\ntype TextFieldProps = FieldChrome & InputHTMLAttributes<HTMLInputElement>;\n\nexport function BfTextField({ label, hint, error, leadingIcon, className = \"\", id: providedId, ...props }: TextFieldProps) {\n  const generatedId = useId();\n  const id = providedId ?? generatedId;\n  const messageId = `${id}-message`;\n\n  return (\n    <div className={`bds-field ${error ? \"bds-field--error\" : \"\"} ${className}`.trim()}>\n      <label className=\"bds-field__label\" htmlFor={id}>{label}</label>\n      <span className={`bds-field__control ${leadingIcon ? \"bds-field__control--icon\" : \"\"}`}>\n        {leadingIcon && <span className=\"bds-field__icon\" aria-hidden=\"true\">{leadingIcon}</span>}\n        <input id={id} aria-invalid={Boolean(error)} aria-describedby={hint || error ? messageId : undefined} {...props} />\n      </span>\n      {(error || hint) && <small id={messageId}>{error ?? hint}</small>}\n    </div>\n  );\n}\n\ntype SelectFieldProps = FieldChrome & SelectHTMLAttributes<HTMLSelectElement> & {\n  options: Array<{ label: string; value: string }>;\n};\n\nexport function BfSelect({ label, hint, error, options, className = \"\", id: providedId, ...props }: SelectFieldProps) {\n  const generatedId = useId();\n  const id = providedId ?? generatedId;\n  const messageId = `${id}-message`;\n\n  return (\n    <div className={`bds-field ${error ? \"bds-field--error\" : \"\"} ${className}`.trim()}>\n      <label className=\"bds-field__label\" htmlFor={id}>{label}</label>\n      <select id={id} aria-invalid={Boolean(error)} aria-describedby={hint || error ? messageId : undefined} {...props}>\n        {options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}\n      </select>\n      {(error || hint) && <small id={messageId}>{error ?? hint}</small>}\n    </div>\n  );\n}\n\ntype TextareaFieldProps = FieldChrome & TextareaHTMLAttributes<HTMLTextAreaElement>;\n\nexport function BfTextarea({ label, hint, error, className = \"\", id: providedId, ...props }: TextareaFieldProps) {\n  const generatedId = useId();\n  const id = providedId ?? generatedId;\n  const messageId = `${id}-message`;\n\n  return (\n    <div className={`bds-field ${error ? \"bds-field--error\" : \"\"} ${className}`.trim()}>\n      <label className=\"bds-field__label\" htmlFor={id}>{label}</label>\n      <textarea id={id} aria-invalid={Boolean(error)} aria-describedby={hint || error ? messageId : undefined} {...props} />\n      {(error || hint) && <small id={messageId}>{error ?? hint}</small>}\n    </div>\n  );\n}\n"
+    }
+  ]
+}
