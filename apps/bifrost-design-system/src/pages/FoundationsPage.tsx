@@ -6,6 +6,7 @@ import { DensityControl } from "../components/DensityControl";
 import { PageIntro } from "../components/PageIntro";
 import { SectionMarker } from "../components/SectionMarker";
 import { BifrostMark } from "../design-system/BifrostMark";
+import { BifrostWordmark } from "../design-system/BifrostWordmark";
 
 const colors = [
   ["Canvas", "#08090B", "Dark-first product canvas"], ["Surface", "#0A0C0F", "Raised structure"],
@@ -27,11 +28,8 @@ export function FoundationsPage() {
         <SectionMarker title="Logo" />
         <div className="logo-foundation">
           <div className="logo-lockup">
-            <span className="specimen-label">Adaptive native wordmark</span>
-            <span className={`logo-wordmark logo-wordmark--${theme}`}>
-              <img src="/brand/logo-wordmark.svg" alt="Bifrost" />
-              <img className="logo-wordmark__dark-neutral" src="/brand/logo-wordmark.svg" alt="" aria-hidden="true" />
-            </span>
+            <span className="specimen-label">Vector wordmark candidate</span>
+            <BifrostWordmark className="logo-wordmark" surface={theme} />
           </div>
           <div className="logo-mark logo-mark--light">
             <span className="specimen-label">Square mark</span>
@@ -49,7 +47,7 @@ export function FoundationsPage() {
         <div className="logo-guidance">
           <p><strong>Use the lockup</strong> for a Bifrost-owned entrance, report masthead, or branded client moment.</p>
           <p><strong>Use the mark</strong> where the product context already names Bifrost: app rails, favicons, and compact headers.</p>
-          <p><strong>On dark surfaces,</strong> keep the bridge in the mark and render the full name as one neutral word. Never invert the rainbow.</p>
+          <p><strong>The vector candidate</strong> preserves the native letter geometry, redraws the mark without embedded raster images, and gives each surface its own restrained frost ramp.</p>
         </div>
         <div className="logo-assets" aria-label="Download Bifrost logo SVGs">
           <a href="/brand/logo-wordmark.svg" download><span>Horizontal wordmark</span><small>SVG · website master</small><Download size={15} /></a>

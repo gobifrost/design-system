@@ -165,10 +165,7 @@ a { color: inherit; text-decoration: none; }
 .logo-foundation .specimen-label { margin: 0; }
 .logo-foundation > .logo-lockup { justify-content: flex-start; }
 .logo-lockup .specimen-label { margin-bottom: 20px; }
-.logo-wordmark { position: relative; display: block; align-self: center; width: min(320px, 82%); }
-.logo-wordmark img { display: block; width: 100%; height: auto; }
-.logo-wordmark__dark-neutral { position: absolute; inset: 0; display: none !important; clip-path: inset(0 0 0 30%); filter: invert(1) grayscale(1) brightness(1.65) contrast(1.05); }
-.logo-wordmark--dark .logo-wordmark__dark-neutral { display: block !important; }
+.logo-wordmark { display: block; align-self: center; width: min(320px, 82%); height: auto; }
 .logo-mark { align-items: center; }
 .logo-mark .specimen-label { align-self: flex-start; }
 .logo-mark--dark { background: var(--bf-deep); }

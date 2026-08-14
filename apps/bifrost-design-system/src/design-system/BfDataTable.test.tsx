@@ -67,4 +67,10 @@ describe("BfDataTable", () => {
     expect(screen.getByText("No matches")).toBeVisible();
     expect(screen.getByText("Clear a filter.")).toBeVisible();
   });
+
+  it("does not manufacture horizontal overflow without an explicit minimum", () => {
+    render(<BfDataTable ariaLabel="Fitting table" rows={rows} columns={columns} getRowId={(row) => row.id} />);
+    const table = screen.getByRole("table", { name: "Fitting table" });
+    expect(table.closest(".bds-data-table")).toHaveStyle({ "--bds-data-table-min-width": "100%" });
+  });
 });

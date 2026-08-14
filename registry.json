@@ -82,6 +82,14 @@
       "files": [{ "path": "apps/bifrost-design-system/src/design-system/BfDialog.tsx", "target": "src/components/bifrost/BfDialog.tsx", "type": "registry:ui" }]
     },
     {
+      "name": "action-menu",
+      "type": "registry:ui",
+      "description": "Viewport-aware local action menu with keyboard traversal, focus return, disabled items, and destructive tone.",
+      "registryDependencies": ["styles"],
+      "dependencies": ["lucide-react"],
+      "files": [{ "path": "apps/bifrost-design-system/src/design-system/BfActionMenu.tsx", "target": "src/components/bifrost/BfActionMenu.tsx", "type": "registry:ui" }]
+    },
+    {
       "name": "data-table",
       "type": "registry:ui",
       "description": "Typed semantic data table with owned scrolling, sticky headers, sorting, selection, row navigation, state coverage, and pinned pagination.",
@@ -95,6 +103,7 @@
       "description": "Native Bifrost website mark and React wrapper.",
       "files": [
         { "path": "apps/bifrost-design-system/src/design-system/BifrostMark.tsx", "target": "src/components/bifrost/BifrostMark.tsx", "type": "registry:ui" },
+        { "path": "apps/bifrost-design-system/src/design-system/BifrostWordmark.tsx", "target": "src/components/bifrost/BifrostWordmark.tsx", "type": "registry:ui" },
         { "path": "apps/bifrost-design-system/public/brand/logo-square.svg", "target": "public/brand/logo-square.svg", "type": "registry:file" }
       ]
     }

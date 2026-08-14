@@ -1,11 +1,12 @@
-import { AlertTriangle, ArrowLeft, ArrowRight, Check, Download, Inbox, LoaderCircle, MoreHorizontal, Plus, RotateCcw, Search, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { AlertTriangle, ArrowLeft, ArrowRight, Check, Copy, Download, ExternalLink, Inbox, LoaderCircle, MoreHorizontal, Plus, RotateCcw, Search, Trash2 } from "lucide-react";
+import { useMemo, useState } from "react";
 import type { KeyboardEvent } from "react";
 import { useOutletContext } from "react-router-dom";
 import type { CatalogContext } from "../components/AppShell";
 import { DensityControl } from "../components/DensityControl";
 import { PageIntro } from "../components/PageIntro";
 import { BfAlert } from "../design-system/BfAlert";
+import { BfActionMenu } from "../design-system/BfActionMenu";
 import { BfButton } from "../design-system/BfButton";
 import { BfChip } from "../design-system/BfChip";
 import { BfCombobox, BfMultiSelect, type BfComboboxOption } from "../design-system/BfCombobox";
@@ -191,12 +192,12 @@ const dataRows: Opportunity[] = [
 
 const stageTone = { Discovery: "info", Approved: "success", Draft: "neutral", Review: "warning", "At risk": "danger" } as const;
 const stageOptions: BfComboboxOption[] = Object.keys(stageTone).map((stage) => ({ value: stage, label: stage }));
-const dataColumns: BfDataColumn<Opportunity>[] = [
-  { id: "name", header: "Opportunity", width: "16rem", sortable: true, sortValue: (row) => row.name, cell: (row) => <span className="data-row-name"><strong>{row.name}</strong><small>{row.account}</small></span> },
-  { id: "stage", header: "Stage", width: "8.5rem", sortable: true, sortValue: (row) => row.stage, cell: (row) => <BfChip tone={stageTone[row.stage]}>{row.stage}</BfChip> },
-  { id: "owner", header: "Owner", width: "8rem", sortable: true, accessor: "owner" },
-  { id: "value", header: "Value", width: "6.5rem", align: "end", sortable: true, sortValue: (row) => row.value, cell: (row) => `$${row.value.toLocaleString()}` },
-  { id: "action", header: <span className="sr-only">Open</span>, width: "2.5rem", align: "end", cell: (row) => <button type="button" className="data-row-action" aria-label={`Open ${row.name}`}><ArrowRight size={15} /></button> },
+const createDataColumns = (onAction: (row: Opportunity, action: string) => void): BfDataColumn<Opportunity>[] => [
+  { id: "name", header: "Opportunity", width: "38%", sortable: true, sortValue: (row) => row.name, cell: (row) => <span className="data-row-name"><strong>{row.name}</strong><small>{row.account}</small></span> },
+  { id: "stage", header: "Stage", width: "19%", sortable: true, sortValue: (row) => row.stage, cell: (row) => <BfChip tone={stageTone[row.stage]}>{row.stage}</BfChip> },
+  { id: "owner", header: "Owner", width: "18%", sortable: true, accessor: "owner" },
+  { id: "value", header: "Value", width: "16%", align: "end", sortable: true, sortValue: (row) => row.value, cell: (row) => `$${row.value.toLocaleString()}` },
+  { id: "action", header: <span className="sr-only">Actions</span>, width: "2.75rem", align: "end", cell: (row) => <BfActionMenu label={`Actions for ${row.name}`} items={[{ value: "open", label: "Open opportunity", icon: <ExternalLink size={14} /> }, { value: "duplicate", label: "Duplicate", icon: <Copy size={14} /> }, { value: "archive", label: "Archive", icon: <Trash2 size={14} />, tone: "danger", separatorBefore: true }]} onSelect={(action) => onAction(row, action)} /> },
 ];
 
 function DataSpecimen() {
@@ -205,6 +206,7 @@ function DataSpecimen() {
   const [stages, setStages] = useState<string[]>([]);
   const [selected, setSelected] = useState<string[]>([]);
   const [lastOpened, setLastOpened] = useState<string>();
+  const columns = useMemo(() => createDataColumns((row, action) => setLastOpened(`${action === "open" ? "Opened" : action === "duplicate" ? "Duplicated" : "Archived"} ${row.name}`)), []);
   const filtered = dataRows.filter((row) => {
     const matchesQuery = `${row.name} ${row.account} ${row.owner}`.toLocaleLowerCase().includes(query.toLocaleLowerCase());
     return matchesQuery && (!stages.length || stages.includes(row.stage));
@@ -218,7 +220,7 @@ function DataSpecimen() {
       <BfDataTable
         ariaLabel="Sales opportunities"
         rows={pageRows}
-        columns={dataColumns}
+        columns={columns}
         getRowId={(row) => row.id}
         defaultSort={{ columnId: "value", direction: "descending" }}
         selection="multiple"
@@ -233,6 +235,7 @@ function DataSpecimen() {
         footer={<span>{selected.length ? `${selected.length} selected across results` : lastOpened ? `Opened ${lastOpened}` : "Select rows for bulk actions"}</span>}
         pagination={{ page: safePage, pageSize, total: filtered.length, onPageChange: setPage }}
         maxHeight="25rem"
+        minWidth="38rem"
       />
     </div>
   );

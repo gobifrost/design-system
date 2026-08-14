@@ -1,4 +1,4 @@
-import { useMemo, useState, type KeyboardEvent, type MouseEvent, type ReactNode } from "react";
+import { useMemo, useState, type CSSProperties, type KeyboardEvent, type MouseEvent, type ReactNode } from "react";
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, ChevronsUpDown, RotateCcw } from "lucide-react";
 import { BfButton } from "./BfButton";
 import "./components.css";
@@ -62,6 +62,7 @@ export interface BfDataTableProps<Row> {
   pagination?: BfDataTablePagination;
   stickyHeader?: boolean;
   maxHeight?: string;
+  minWidth?: string;
   className?: string;
 }
 
@@ -105,6 +106,7 @@ export function BfDataTable<Row>({
   pagination,
   stickyHeader = true,
   maxHeight = "32rem",
+  minWidth = "100%",
   className = "",
 }: BfDataTableProps<Row>) {
   const [internalSort, setInternalSort] = useState<BfDataTableSort | undefined>(defaultSort);
@@ -161,7 +163,7 @@ export function BfDataTable<Row>({
   const columnCount = columns.length + (selection !== "none" ? 1 : 0);
 
   return (
-    <section className={`bds-data-table ${className}`.trim()}>
+    <section className={`bds-data-table ${className}`.trim()} style={{ "--bds-data-table-min-width": minWidth } as CSSProperties}>
       {toolbar && <div className="bds-data-table__toolbar">{toolbar}</div>}
       <div className="bds-data-table__scroller" style={{ maxHeight }}>
         <table aria-label={ariaLabel} aria-busy={loading || undefined}>

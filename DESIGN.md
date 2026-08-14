@@ -9,7 +9,7 @@ The Bifrost Design System is the operating layer for Bifrost software: dark-firs
 Evidence was captured from `gobifrost/website` at `afa9e9b4842304c54ff1b5d79d010017f1da23cb`.
 
 - Native marks are copied without reconstruction from `public/logo-square.svg`, `public/logo-lightmode.svg`, and `public/favicon.svg`.
-- The full lockup is surface-aware: light surfaces retain the website master; dark surfaces preserve the rainbow square while treating the complete wordmark as one light neutral. Never invert or recolor the bridge spectrum.
+- `BifrostWordmark` is an approval candidate, not a silent replacement master. It reuses the native wordmark path, redraws the simple bridge geometry without embedded PNGs, and supplies restrained frost ramps for light and dark surfaces. The website exports remain the canonical source until the candidate is approved.
 - The default canvas is `#08090b`, the primary surface is `#0a0c0f`, and decisive action cyan is `#2fd4d4`.
 - The bridge spectrum runs red → orange → yellow → green → cyan → blue → purple → magenta. It appears as a rare, thin seam, localized route, or progress signal—not a decorative panel fill or viewport frame.
 - Inter is the interface workhorse, Prompt is reserved for brand/display moments, and JetBrains Mono carries code and measurements.
@@ -81,8 +81,9 @@ With `prefers-reduced-motion: reduce`, durations become 0ms and blur, clipping, 
 - Tabs distribute bounded peers evenly; long sets may scroll and size to content.
 - Alerts identify what happened and, when useful, the recovery action.
 - Dialogs use a bounded surface with a separately scrolling body, Escape/backdrop dismissal, and focus return.
+- Local row actions use the vertical-ellipsis BfActionMenu. Its menu portals outside table scrollers, supports arrow-key traversal and Escape, and returns focus to the trigger.
 - Searchable set selection uses BfCombobox or BfMultiSelect. Both own query filtering, keyboard traversal, descriptions/keywords, empty/loading/disabled/error states, and linked field messaging; multi-select also owns tag removal, limits, and bulk selection.
-- BfDataTable owns a content-sized-until-constrained scroller, sticky semantic headers, sorting, single/multi selection, loading/empty/error states, row activation, and a pinned footer/pagination region. Entity-specific columns, data fetching, filters, and actions stay with the consumer.
+- BfDataTable owns a content-sized-until-constrained scroller, sticky semantic headers, sorting, single/multi selection, loading/empty/error states, row activation, and a pinned footer/pagination region. It fits its container by default; consumers set `minWidth` only when their semantic columns genuinely cannot reflow. Entity-specific columns, data fetching, filters, and actions stay with the consumer.
 
 ## Layout and responsiveness
 
