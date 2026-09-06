@@ -5,6 +5,7 @@
   "scripts": {
     "registry:build": "node scripts/build-registry.mjs",
     "test:registry": "node --test scripts/add.test.mjs",
-    "qa": "node scripts/qa.mjs"
+    "qa": "node scripts/qa.mjs",
+    "qa:execution": "node scripts/qa-execution.mjs"
   }
 }

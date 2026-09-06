@@ -21,6 +21,12 @@ test("source installer shares identical dependencies and protects consumer edits
     assert.equal(composed.status, 0, composed.stderr);
     assert.match(await readFile(join(root, "src/components/bifrost/BfCombobox.tsx"), "utf8"), /export function BfCombobox/);
 
+    const execution = install("execution-stream", root);
+    assert.equal(execution.status, 0, execution.stderr);
+    for (const file of ["BfExecutionStream.tsx", "execution.css", "BfButton.tsx", "types.ts", "components.css", "tokens.css"]) {
+      assert((await readFile(join(root, "src/components/bifrost", file), "utf8")).length > 0, `missing execution dependency: ${file}`);
+    }
+
     await appendFile(join(root, "src/components/bifrost/components.css"), "\n/* consumer customization */\n");
     const protectedInstall = install("alert", root);
     assert.equal(protectedInstall.status, 1);

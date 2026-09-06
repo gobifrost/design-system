@@ -1,5 +1,5 @@
 import { useBifrostContext } from "bifrost";
-import { BookOpen, Box, Grid2X2, Layers3, Menu, Moon, Sun, TerminalSquare, X } from "lucide-react";
+import { BookOpen, Box, Grid2X2, Layers3, Activity, Menu, Moon, Sun, TerminalSquare, X } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
@@ -11,6 +11,7 @@ const navItems: Array<{ to: string; label: string; icon: LucideIcon; end?: boole
   { to: "/", label: "Field guide", icon: BookOpen, end: true },
   { to: "/foundations", label: "Foundations", icon: Layers3 },
   { to: "/components", label: "Components", icon: Box },
+  { to: "/execution", label: "Execution stream", icon: Activity },
   { to: "/patterns", label: "App patterns", icon: Grid2X2 },
   { to: "/start", label: "Start building", icon: TerminalSquare },
 ];

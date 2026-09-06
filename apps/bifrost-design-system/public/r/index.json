@@ -230,6 +230,30 @@
           "type": "registry:file"
         }
       ]
+    },
+    {
+      "name": "execution-stream",
+      "type": "registry:ui",
+      "description": "Transport-independent execution output with connection state, reader-controlled scroll following, and reduced-motion spectrum activity.",
+      "registryDependencies": [
+        "button",
+        "styles"
+      ],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "apps/bifrost-design-system/src/design-system/BfExecutionStream.tsx",
+          "target": "src/components/bifrost/BfExecutionStream.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "apps/bifrost-design-system/src/design-system/execution.css",
+          "target": "src/components/bifrost/execution.css",
+          "type": "registry:style"
+        }
+      ]
     }
   ]
 }

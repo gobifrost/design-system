@@ -16,6 +16,7 @@
   --bf-canvas: var(--background, #f7f9fa);
   --bf-paper: var(--card, #ffffff);
   --bf-cool: var(--muted, #eef2f3);
+  --bf-surface-raised: color-mix(in srgb, var(--bf-paper) 65%, var(--bf-cool));
   --bf-deep: #08090b;
   --bf-line: var(--border, #d7dfe3);
   --bf-line-strong: #aebbc2;

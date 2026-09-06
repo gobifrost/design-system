@@ -89,6 +89,18 @@ With `prefers-reduced-motion: reduce`, durations become 0ms and blur, clipping, 
 
 The catalog uses one nested content scroller with a stable gutter. The document root never grows a second scrollbar during route or dialog animation. Desktop uses a persistent rail; below 900px it becomes a header and modal navigation drawer. Dense tables may scroll horizontally only when their semantic structure cannot reflow.
 
+## Execution and streaming
+
+The shared reference is `/execution`; source lives in `BfExecutionStream.tsx` and `execution.css`. See [the integration contract](docs/execution-stream.md).
+
+- Teal owns primary actions, focus, and current selection. Supporting specimen labels use muted text.
+- Spectrum motion belongs to a connected, running execution. A thin seam spans the output surface; its travel is indeterminate activity, never a completion percentage. Queued, disconnected, and terminal states stop the seam. Reduced motion preserves a static spectrum while active.
+- Success, warning, and error retain semantic colors and visible text. Connection loss does not imply execution failure.
+- A raised surface token, `--bf-surface-raised`, mixes host-aware paper and muted surfaces for working headers. Borders and subtle tones establish depth without decorative glow.
+- Output uses JetBrains Mono, explicit timestamps and severity labels, and wrapping messages. Only execution and connection changes are announced; log entries are available for deliberate reading.
+- Follow new output only while the reader is at the bottom. Scrolling up suspends following; a visible Jump to latest control restores it. Changing execution resets following.
+- Consumers own transport, authorization, stable event IDs, ordering, redaction, and bounded retention. This component does not call a Bifrost API or imply that its catalog fixture is a real execution.
+
 ## Distribution
 
 `registry.json` is the source manifest. `npm run registry:build` emits shadcn-compatible payloads to the catalog's `public/r/` directory, and `node scripts/add.mjs <item> --root <app>` copies dependency-complete source into a consumer. See `docs/consumption.md`.

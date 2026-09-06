@@ -48,12 +48,18 @@ async function desktopContract() {
 
   const initialSwitch = page.getByRole("switch", { name: "Switch to light theme" });
   if (await initialSwitch.getAttribute("aria-checked") !== "true") failures.push("theme: catalog should start in website-led dark mode");
-  await page.screenshot({ path: `${outputDir}field-guide-dark-desktop.png`, fullPage: true });
+  await page.screenshot({ animations: "disabled", path: `${outputDir}field-guide-dark-desktop.png`, fullPage: true });
 
   await page.getByRole("radio", { name: "Compact", exact: true }).click();
   if (await page.locator(".catalog-shell").getAttribute("data-density") !== "compact") failures.push("density: compact mode did not apply");
   await page.getByRole("radio", { name: "Compact", exact: true }).press("ArrowRight");
   if (await page.locator(".catalog-shell").getAttribute("data-density") !== "comfortable") failures.push("density: arrow-key selection did not apply");
+
+  const specimenAlignment = await page.locator(".specimen-list .specimen-row").evaluateAll((rows) => rows.map((row) => {
+    const demo = row.querySelector(".specimen-demo");
+    return { left: demo.getBoundingClientRect().left, rowRight: row.getBoundingClientRect().right, demoRight: demo.getBoundingClientRect().right };
+  }));
+  if (Math.max(...specimenAlignment.map((row) => row.left)) - Math.min(...specimenAlignment.map((row) => row.left)) > 1 || specimenAlignment.some((row) => row.demoRight > row.rowRight)) failures.push("home: specimen controls do not share an aligned column within their rows");
 
   const installCommandLayout = await page.locator(".quick-install code").evaluate((element) => ({ scrollWidth: element.scrollWidth, clientWidth: element.clientWidth, whiteSpace: getComputedStyle(element).whiteSpace }));
   if (installCommandLayout.scrollWidth > installCommandLayout.clientWidth + 1 || installCommandLayout.whiteSpace === "nowrap") failures.push(`install command is not fully legible: ${JSON.stringify(installCommandLayout)}`);
@@ -70,7 +76,7 @@ async function desktopContract() {
   await page.locator("html:not(.dark)").waitFor();
   const lightContrast = await page.evaluate(() => ({ foreground: getComputedStyle(document.body).color, background: getComputedStyle(document.body).backgroundColor }));
   if (contrast(lightContrast.foreground, lightContrast.background) < 4.5) failures.push(`light contrast below AA: ${JSON.stringify(lightContrast)}`);
-  await page.screenshot({ path: `${outputDir}field-guide-light-desktop.png`, fullPage: true });
+  await page.screenshot({ animations: "disabled", path: `${outputDir}field-guide-light-desktop.png`, fullPage: true });
 
   await navigation.getByRole("link", { name: "Foundations" }).click();
   await page.getByRole("heading", { name: "A small vocabulary, used deliberately." }).waitFor();
@@ -79,12 +85,12 @@ async function desktopContract() {
   if (!brandAssets) failures.push("foundations: one or more native logo assets failed to load");
   const bridgeAnimation = await page.locator(".motion-bridge-demo span").evaluate((element) => getComputedStyle(element).animationName);
   if (bridgeAnimation !== "bridge-shift") failures.push(`motion: bridge animation missing (${bridgeAnimation})`);
-  await page.screenshot({ path: `${outputDir}foundations-light-desktop.png`, fullPage: true });
+  await page.screenshot({ animations: "disabled", path: `${outputDir}foundations-light-desktop.png`, fullPage: true });
   await page.getByRole("switch", { name: "Switch to dark theme" }).click();
   const darkWordmark = page.locator(".logo-wordmark[data-surface=dark]");
   await darkWordmark.waitFor();
   if (await darkWordmark.locator("image").count()) failures.push("foundations: vector wordmark still contains an embedded raster image");
-  await page.screenshot({ path: `${outputDir}foundations-dark-desktop.png`, fullPage: true });
+  await page.screenshot({ animations: "disabled", path: `${outputDir}foundations-dark-desktop.png`, fullPage: true });
   await page.getByRole("switch", { name: "Switch to light theme" }).click();
   await page.locator("html:not(.dark)").waitFor();
 
@@ -122,7 +128,7 @@ async function desktopContract() {
   await page.getByRole("searchbox", { name: "Search people" }).fill("security");
   await page.getByRole("option", { name: /Ruth Kim/ }).click();
   if (!(await owners.textContent())?.includes("+1 more")) failures.push("forms: multi-select overflow summary did not update");
-  await page.locator(".workbench").screenshot({ path: `${outputDir}components-forms-search-light-desktop.png` });
+  await page.locator(".workbench").screenshot({ animations: "disabled", path: `${outputDir}components-forms-search-light-desktop.png` });
   await page.getByRole("searchbox", { name: "Search people" }).press("Escape");
 
   await page.getByRole("tab", { name: "Selection", exact: true }).click();
@@ -154,7 +160,7 @@ async function desktopContract() {
   await rowMenu.waitFor();
   const rowMenuGeometry = await rowMenu.evaluate((menu) => ({ position: getComputedStyle(menu).position, right: menu.getBoundingClientRect().right, viewportWidth: window.innerWidth }));
   if (rowMenuGeometry.position !== "fixed" || rowMenuGeometry.right > rowMenuGeometry.viewportWidth - 7) failures.push(`data: row action menu escaped the viewport (${JSON.stringify(rowMenuGeometry)})`);
-  await page.screenshot({ path: `${outputDir}components-data-actions-light-desktop.png`, fullPage: true });
+  await page.screenshot({ animations: "disabled", path: `${outputDir}components-data-actions-light-desktop.png`, fullPage: true });
   await rowMenu.getByRole("menuitem", { name: "Duplicate" }).click();
   await page.getByText("Duplicated Security uplift").waitFor();
   await opportunities.getByRole("button", { name: /Opportunity/ }).click();
@@ -165,7 +171,7 @@ async function desktopContract() {
   await opportunities.getByText("Compliance evidence").waitFor();
   await page.getByLabel("Search opportunities").fill("identity");
   await opportunities.getByText("Identity hardening").waitFor();
-  await page.screenshot({ path: `${outputDir}components-data-light-desktop.png`, fullPage: true });
+  await page.screenshot({ animations: "disabled", path: `${outputDir}components-data-light-desktop.png`, fullPage: true });
 
   await page.getByRole("tab", { name: "Overlay", exact: true }).click();
   await page.getByRole("button", { name: "Account actions" }).click();
@@ -185,30 +191,30 @@ async function desktopContract() {
     };
   });
   if (dialogContract.surfaceOverflow !== "hidden" || dialogContract.bodyOverflow !== "auto" || dialogContract.surfaceHeight > dialogContract.allowance + 1) failures.push(`dialog containment: ${JSON.stringify(dialogContract)}`);
-  await page.screenshot({ path: `${outputDir}components-overlay-light-desktop.png`, fullPage: true });
+  await page.screenshot({ animations: "disabled", path: `${outputDir}components-overlay-light-desktop.png`, fullPage: true });
   await page.getByRole("button", { name: "Close dialog" }).click();
 
   await page.getByRole("tab", { name: "Motion" }).click();
   const loadingAnimation = await page.locator(".motion-loading-line i").evaluate((element) => getComputedStyle(element).animationName);
   if (loadingAnimation !== "loading-line") failures.push(`motion: loading animation missing (${loadingAnimation})`);
   await page.getByRole("button", { name: "Replay" }).click();
-  await page.screenshot({ path: `${outputDir}components-motion-light-desktop.png`, fullPage: true });
+  await page.screenshot({ animations: "disabled", path: `${outputDir}components-motion-light-desktop.png`, fullPage: true });
 
   await page.getByRole("switch", { name: "Switch to dark theme" }).click();
   await page.locator("html.dark").waitFor();
-  await page.screenshot({ path: `${outputDir}components-motion-dark-desktop.png`, fullPage: true });
+  await page.screenshot({ animations: "disabled", path: `${outputDir}components-motion-dark-desktop.png`, fullPage: true });
 
   await navigation.getByRole("link", { name: "App patterns" }).click();
   await page.getByRole("heading", { name: "Recurring structures for recurring work." }).waitFor();
   const secondPriority = page.getByRole("button", { name: /Plan device replacements/ });
   await secondPriority.click();
   if (await secondPriority.getAttribute("aria-expanded") !== "true") failures.push("patterns: disclosure did not open");
-  await page.screenshot({ path: `${outputDir}patterns-dark-desktop.png`, fullPage: true });
+  await page.screenshot({ animations: "disabled", path: `${outputDir}patterns-dark-desktop.png`, fullPage: true });
 
   await navigation.getByRole("link", { name: "Start building" }).click();
   await page.getByRole("heading", { name: "Begin with the work, then choose the rhythm." }).waitFor();
   await page.getByText("node scripts/add.mjs button --root ../your-app", { exact: false }).waitFor();
-  await page.screenshot({ path: `${outputDir}start-dark-desktop.png`, fullPage: true });
+  await page.screenshot({ animations: "disabled", path: `${outputDir}start-dark-desktop.png`, fullPage: true });
 
   await page.close();
   return failures;
@@ -220,7 +226,7 @@ async function mobileContract() {
   collectErrors(page, failures, "mobile ");
   await page.goto(baseUrl, { waitUntil: "networkidle" });
   await page.getByRole("heading", { name: "Build interfaces that feel native to Bifrost." }).waitFor();
-  await page.screenshot({ path: `${outputDir}field-guide-dark-mobile.png`, fullPage: true });
+  await page.screenshot({ animations: "disabled", path: `${outputDir}field-guide-dark-mobile.png`, fullPage: true });
 
   const horizontalOverflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   if (horizontalOverflow > 1) failures.push(`mobile overflow: ${horizontalOverflow}px`);
@@ -229,7 +235,7 @@ async function mobileContract() {
   await page.getByRole("navigation", { name: "Design system sections" }).getByRole("link", { name: "Components" }).click();
   await page.getByRole("heading", { name: "See the behavior, not just the shape." }).waitFor();
   await page.getByRole("tab", { name: "Forms", exact: true }).click();
-  await page.screenshot({ path: `${outputDir}components-forms-dark-mobile.png`, fullPage: true });
+  await page.screenshot({ animations: "disabled", path: `${outputDir}components-forms-dark-mobile.png`, fullPage: true });
   await page.close();
   return failures;
 }

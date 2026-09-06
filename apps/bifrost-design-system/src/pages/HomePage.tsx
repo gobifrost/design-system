@@ -51,6 +51,8 @@ export function HomePage() {
             </div>
           </header>
 
+          <Link className="execution-reference" to="/execution"><span><strong>Built for work in motion.</strong><span>Explore the streaming execution pattern</span></span><ArrowRight size={20} aria-hidden="true" /></Link>
+
           <section className="live-specimens" aria-labelledby="live-specimens-title">
             <div className="specimens-heading">
               <div>
