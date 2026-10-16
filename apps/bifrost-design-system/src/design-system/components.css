@@ -195,3 +195,9 @@
 
 .bds-dialog__surface header > button:focus-visible { outline: 2px solid var(--bf-primary); outline-offset: 2px; }
 @media (max-width: 540px) { .bds-dialog__surface > header, .bds-dialog__body { padding: 16px; }.bds-dialog__surface > footer { padding: 12px 16px; } }
+
+.bds-tooltip__trigger { display: inline-flex; align-items: center; gap: 8px; max-width: 100%; min-height: 24px; padding: 0; border: 0; border-radius: var(--bf-radius-control); background: transparent; color: inherit; font: inherit; text-align: left; white-space: nowrap; cursor: help; }
+.bds-tooltip__trigger > svg { flex: none; color: var(--bf-muted); }
+.bds-tooltip__trigger:hover > svg { color: var(--bf-primary); }
+.bds-tooltip__trigger:focus-visible { outline: 2px solid var(--bf-primary); outline-offset: 3px; }
+.bds-tooltip { position: fixed; z-index: 1000; width: max-content; max-width: min(320px, calc(100vw - 16px)); box-sizing: border-box; padding: 12px; border: 1px solid var(--bf-line); border-radius: var(--bf-radius-surface); background: var(--bf-paper); color: var(--bf-ink); box-shadow: var(--bf-shadow-float); font: 12px/1.5 var(--bf-font-sans); white-space: pre-line; overflow-wrap: anywhere; }

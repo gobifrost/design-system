@@ -121,3 +121,7 @@ scrolling body. Keep dialog headings at interface scale, and stack form sections
 at narrow widths. Data tables accept `getRowProps` for native row interactions;
 custom handlers compose with row activation and may prevent it. Descendant
 buttons retain native Enter/Space activation.
+
+Use the shared tooltip for supplemental status and error explanations. Hover and
+keyboard focus reveal a floating viewport-bounded layer; Escape dismisses it.
+Tooltips never participate in table layout or expand a row when clicked.

@@ -28,6 +28,10 @@ test("source installer shares identical dependencies and protects consumer edits
       assert((await readFile(join(root, "src/components/bifrost", file), "utf8")).length > 0, `missing execution dependency: ${file}`);
     }
 
+    const tooltip = install("tooltip", root);
+    assert.equal(tooltip.status, 0, tooltip.stderr);
+    assert.match(await readFile(join(root, "src/components/bifrost/BfTooltip.tsx"), "utf8"), /role="tooltip"/);
+
     await appendFile(join(root, "src/components/bifrost/components.css"), "\n/* consumer customization */\n");
     const protectedInstall = install("alert", root);
     assert.equal(protectedInstall.status, 1);

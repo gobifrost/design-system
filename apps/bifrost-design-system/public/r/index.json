@@ -258,6 +258,21 @@
           "type": "registry:style"
         }
       ]
+    },
+    {
+      "name": "tooltip",
+      "type": "registry:ui",
+      "description": "Supplemental hover and focus help that floats outside layout, stays within the viewport, and dismisses with Escape.",
+      "registryDependencies": [
+        "styles"
+      ],
+      "files": [
+        {
+          "path": "apps/bifrost-design-system/src/design-system/BfTooltip.tsx",
+          "target": "src/components/bifrost/BfTooltip.tsx",
+          "type": "registry:ui"
+        }
+      ]
     }
   ]
 }
