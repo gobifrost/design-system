@@ -1,4 +1,4 @@
-import { useMemo, useState, type CSSProperties, type KeyboardEvent, type MouseEvent, type ReactNode } from "react";
+import { useMemo, useState, type CSSProperties, type HTMLAttributes, type KeyboardEvent, type MouseEvent, type ReactNode } from "react";
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, ChevronsUpDown, RotateCcw } from "lucide-react";
 import { BfButton } from "./BfButton";
 import "./components.css";
@@ -59,6 +59,8 @@ export interface BfDataTableProps<Row> {
   onSelectionChange?: (ids: string[]) => void;
   getRowHref?: (row: Row) => string | undefined;
   onRowActivate?: (row: Row) => void;
+  /** Adds native row attributes and event handlers without replacing table behavior. */
+  getRowProps?: (row: Row) => HTMLAttributes<HTMLTableRowElement>;
   pagination?: BfDataTablePagination;
   stickyHeader?: boolean;
   maxHeight?: string;
@@ -103,6 +105,7 @@ export function BfDataTable<Row>({
   onSelectionChange,
   getRowHref,
   onRowActivate,
+  getRowProps,
   pagination,
   stickyHeader = true,
   maxHeight = "32rem",
@@ -212,19 +215,26 @@ export function BfDataTable<Row>({
             ) : sortedRows.map((row) => {
               const rowId = getRowId(row);
               const interactive = Boolean(onRowActivate || getRowHref?.(row));
+              const { className: rowClassName, onClick: onRowPropsClick, onAuxClick: onRowPropsAuxClick, onKeyDown: onRowPropsKeyDown, tabIndex: rowTabIndex, ...rowProps } = getRowProps?.(row) ?? {};
               return (
                 <tr
                   key={rowId}
+                  {...rowProps}
+                  className={rowClassName}
                   data-selected={selectedSet.has(rowId) || undefined}
                   data-interactive={interactive || undefined}
-                  tabIndex={interactive ? 0 : undefined}
+                  tabIndex={interactive ? 0 : rowTabIndex}
                   onClick={(event) => {
-                    if (!isInteractiveTarget(event.target)) activate(row, event);
+                    onRowPropsClick?.(event);
+                    if (!event.defaultPrevented && !isInteractiveTarget(event.target)) activate(row, event);
                   }}
                   onAuxClick={(event) => {
-                    if (event.button === 1 && !isInteractiveTarget(event.target) && getRowHref?.(row)) window.open(getRowHref(row), "_blank", "noopener,noreferrer");
+                    onRowPropsAuxClick?.(event);
+                    if (!event.defaultPrevented && event.button === 1 && !isInteractiveTarget(event.target) && getRowHref?.(row)) window.open(getRowHref(row), "_blank", "noopener,noreferrer");
                   }}
                   onKeyDown={(event) => {
+                    onRowPropsKeyDown?.(event);
+                    if (event.defaultPrevented || isInteractiveTarget(event.target)) return;
                     if (event.key === "Enter" || event.key === " ") {
                       event.preventDefault();
                       activate(row, event);

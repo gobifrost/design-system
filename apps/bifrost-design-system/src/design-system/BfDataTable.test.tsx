@@ -73,4 +73,23 @@ describe("BfDataTable", () => {
     const table = screen.getByRole("table", { name: "Fitting table" });
     expect(table.closest(".bds-data-table")).toHaveStyle({ "--bds-data-table-min-width": "100%" });
   });
+  it("composes custom row handlers and preserves native button keyboard activation", async () => {
+    const user = userEvent.setup();
+    const onActivate = vi.fn();
+    const onToggle = vi.fn();
+    const onRowClick = vi.fn();
+    render(<BfDataTable rows={rows} columns={[{id:"name",header:"Name",accessor:"name"},{id:"toggle",header:"Enabled",cell:(row)=><button onClick={onToggle}>Toggle {row.name}</button>}]} getRowId={(row)=>row.id} onRowActivate={onActivate} getRowProps={()=>({onClick:onRowClick,className:"custom-row"})} />);
+    const button = screen.getByRole("button",{name:"Toggle Backup"});
+    button.focus();
+    await user.keyboard(" ");
+    expect(onToggle).toHaveBeenCalledOnce();
+    expect(onActivate).not.toHaveBeenCalled();
+    expect(onRowClick).toHaveBeenCalledOnce();
+    const row=screen.getByRole("row",{name:/Backup/});
+    expect(row).toHaveClass("custom-row");
+    row.focus();
+    await user.keyboard("{Enter}");
+    expect(onActivate).toHaveBeenCalledWith(rows[0]);
+  });
+
 });

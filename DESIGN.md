@@ -113,3 +113,11 @@ The shared reference is `/execution`; source lives in `BfExecutionStream.tsx` an
 ## QA standard
 
 Every component change requires a focused unit test and a browser pass in both themes at representative desktop and mobile sizes. Browser QA covers route continuity, native assets, density, labels and spacing, keyboard/programmatic state, modal containment, reduced motion, horizontal overflow, and console errors.
+
+Native selects explicitly center selected content with flex alignment and a 1.25
+line-height at every density. Native base-select defaults do not center this text.
+Dialogs accept `size="wide"` for complex forms; header/footer stay outside the
+scrolling body. Keep dialog headings at interface scale, and stack form sections
+at narrow widths. Data tables accept `getRowProps` for native row interactions;
+custom handlers compose with row activation and may prevent it. Descendant
+buttons retain native Enter/Space activation.

@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { useEffect, useRef } from "react";
 import "./components.css";
 
-export function BfDialog({ open, onOpenChange, title, description, children, footer }: { open: boolean; onOpenChange: (open: boolean) => void; title: string; description?: string; children: ReactNode; footer?: ReactNode }) {
+export function BfDialog({ open, onOpenChange, title, description, children, footer, size = "default" }: { open: boolean; onOpenChange: (open: boolean) => void; title: string; description?: string; children: ReactNode; footer?: ReactNode; size?: "default" | "wide" }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -14,7 +14,7 @@ export function BfDialog({ open, onOpenChange, title, description, children, foo
   }, [open]);
 
   return (
-    <dialog ref={dialogRef} className="bds-dialog" onCancel={(event) => { event.preventDefault(); onOpenChange(false); }} onClose={() => onOpenChange(false)} onClick={(event) => { if (event.target === event.currentTarget) onOpenChange(false); }}>
+    <dialog ref={dialogRef} className={`bds-dialog${size === "wide" ? " bds-dialog--wide" : ""}`} onCancel={(event) => { event.preventDefault(); onOpenChange(false); }} onClose={() => onOpenChange(false)} onClick={(event) => { if (event.target === event.currentTarget) onOpenChange(false); }}>
       <div className="bds-dialog__surface">
         <header><div><h3>{title}</h3>{description && <p>{description}</p>}</div><button type="button" aria-label="Close dialog" onClick={() => onOpenChange(false)}><X size={18} /></button></header>
         <div className="bds-dialog__body">{children}</div>
