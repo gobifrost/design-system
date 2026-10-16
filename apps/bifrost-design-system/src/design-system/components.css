@@ -46,6 +46,16 @@
 .bds-field__control--select select { appearance: none; -webkit-appearance: none; padding-inline-end: 38px; color-scheme: inherit; }
 .bds-field__select-icon { position: absolute; top: 50%; right: 11px; color: var(--bf-muted); transform: translateY(-50%); pointer-events: none; }
 .bds-field select option { background: var(--bf-paper); color: var(--bf-ink); color-scheme: inherit; }
+@supports (appearance: base-select) {
+  .bds-field__control--select select, .bds-field__control--select select::picker(select) { appearance: base-select; }
+  .bds-field__control--select select::picker-icon { display: none; }
+  .bds-field__control--select select::picker(select) { margin-block: 6px; max-height: min(18rem, 70dvh); overflow: auto; border: 1px solid var(--bf-line); border-radius: var(--bf-radius-surface); padding: 4px; background: var(--bf-paper); color: var(--bf-ink); box-shadow: var(--bf-shadow-float); font: inherit; }
+  .bds-field__control--select option { min-height: 32px; padding: 8px 12px; border-radius: var(--bf-radius-control); font-size: 13px; cursor: pointer; }
+  .bds-field__control--select option:checked { background: var(--bf-cool); color: var(--bf-primary); }
+  .bds-field__control--select option:hover, .bds-field__control--select option:focus-visible { background: var(--bf-cool); }
+  .bds-field__control--select option::checkmark { color: var(--bf-primary); }
+}
+
 .bds-field input::placeholder, .bds-field textarea::placeholder { color: var(--bf-muted); opacity: 1; }
 .bds-field input:hover:not(:disabled):not(:focus), .bds-field textarea:hover:not(:disabled):not(:focus), .bds-field select:hover:not(:disabled):not(:focus) { border-color: var(--bf-line-strong); }
 .bds-field input:disabled, .bds-field textarea:disabled, .bds-field select:disabled { cursor: not-allowed; background: var(--bf-cool); opacity: .55; }
