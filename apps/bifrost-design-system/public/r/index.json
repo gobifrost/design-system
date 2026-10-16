@@ -65,6 +65,9 @@
       "registryDependencies": [
         "styles"
       ],
+      "dependencies": [
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "apps/bifrost-design-system/src/design-system/BfField.tsx",
@@ -78,7 +81,8 @@
       "type": "registry:ui",
       "description": "Searchable single- and multi-select fields with keywords, bulk actions, loading, empty, disabled, error, and form states.",
       "registryDependencies": [
-        "styles"
+        "styles",
+        "field"
       ],
       "dependencies": [
         "lucide-react"

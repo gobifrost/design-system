@@ -20,6 +20,7 @@ test("source installer shares identical dependencies and protects consumer edits
     const composed = install("combobox", root);
     assert.equal(composed.status, 0, composed.stderr);
     assert.match(await readFile(join(root, "src/components/bifrost/BfCombobox.tsx"), "utf8"), /export function BfCombobox/);
+    assert.match(await readFile(join(root, "src/components/bifrost/BfField.tsx"), "utf8"), /export function BfFieldLabel/);
 
     const execution = install("execution-stream", root);
     assert.equal(execution.status, 0, execution.stderr);

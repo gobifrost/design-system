@@ -34,13 +34,14 @@
       "type": "registry:ui",
       "description": "Text, native select, and textarea fields with persistent labels and linked messages.",
       "registryDependencies": ["styles"],
+      "dependencies": ["lucide-react"],
       "files": [{ "path": "apps/bifrost-design-system/src/design-system/BfField.tsx", "target": "src/components/bifrost/BfField.tsx", "type": "registry:ui" }]
     },
     {
       "name": "combobox",
       "type": "registry:ui",
       "description": "Searchable single- and multi-select fields with keywords, bulk actions, loading, empty, disabled, error, and form states.",
-      "registryDependencies": ["styles"],
+      "registryDependencies": ["styles", "field"],
       "dependencies": ["lucide-react"],
       "files": [{ "path": "apps/bifrost-design-system/src/design-system/BfCombobox.tsx", "target": "src/components/bifrost/BfCombobox.tsx", "type": "registry:ui" }]
     },

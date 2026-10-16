@@ -12,6 +12,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { Check, ChevronDown, LoaderCircle, Search, X } from "lucide-react";
+import { BfFieldLabel } from "./BfField";
 import "./components.css";
 
 export interface BfComboboxOption {
@@ -42,6 +43,7 @@ export interface BfComboboxProps extends FieldChrome {
   value?: string;
   onValueChange: (value: string) => void;
   clearable?: boolean;
+  required?: boolean;
 }
 
 export interface BfMultiSelectProps extends FieldChrome {
@@ -184,6 +186,7 @@ export function BfCombobox({
   className = "",
   id: providedId,
   name,
+  required = false,
 }: BfComboboxProps) {
   const generatedId = useId();
   const id = providedId ?? generatedId;
@@ -246,7 +249,7 @@ export function BfCombobox({
 
   return (
     <div ref={wrapperRef} className={`bds-field bds-combobox ${error ? "bds-field--error" : ""} ${className}`.trim()}>
-      <label className="bds-field__label" id={`${id}-label`} htmlFor={id}>{label}</label>
+      <BfFieldLabel id={`${id}-label`} htmlFor={id} label={label} required={required} />
       {name && <input type="hidden" name={name} value={value ?? ""} />}
       <button
         ref={triggerRef}
@@ -259,6 +262,7 @@ export function BfCombobox({
         aria-expanded={open}
         aria-haspopup="listbox"
         aria-invalid={Boolean(error)}
+        aria-required={required || undefined}
         aria-describedby={hint || error ? messageId : undefined}
         disabled={disabled || loading}
         onClick={() => setOpen((current) => !current)}

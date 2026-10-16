@@ -49,6 +49,11 @@ The fallbacks make the source runnable outside Bifrost. Inside Bifrost, canvas, 
 - Spacious: 48px controls, 60px rows, 16px local gap, 28px surface padding.
 - Density changes rhythm only; component meaning, tokens, and behavior remain stable.
 
+Required fields display “Required” beside their persistent label, with native or
+ARIA required semantics and an unchanged accessible name. Native selects retain
+keyboard behavior, use themed option colors and reserve 38px for the shared
+ChevronDown with an 11px inset. Do not rely on an unpadded browser caret.
+
 ### Elevation
 
 Surfaces are flat at rest. Hairlines and tonal shifts establish hierarchy. Floating menus and dialogs may use `--bf-shadow-float` and `--bf-shadow-modal` because they occupy a real layer.
